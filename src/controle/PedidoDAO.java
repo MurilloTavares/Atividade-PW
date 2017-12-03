@@ -11,8 +11,18 @@ import modelo.Pedido;
 
 public class PedidoDAO implements InterfaceDAO<Pedido> {
 
-    Conexao conexao = new Conexao();
-    Connection connection = conexao.getConn();
+    Conexao conexao;
+    Connection connection;
+    
+    public PedidoDAO(){
+        conexao = new Conexao();
+        connection = conexao.getConn();
+    }
+    
+    public PedidoDAO(String url, String user, String pass){
+        conexao = new Conexao(url, user, pass);
+        connection = conexao.getConn();
+    }
 
     private PreparedStatement setPedido(Pedido p, PreparedStatement stat) throws SQLException {
         try {
@@ -50,6 +60,22 @@ public class PedidoDAO implements InterfaceDAO<Pedido> {
         try {
             setPedido(novo, stat);
             stat.setInt(5, p.getId());
+            stat.executeUpdate();
+        } catch (SQLException ex) {
+            throw new SQLException(ex);
+        } finally {
+            stat.close();
+        }
+    }
+    
+    public void alterar(int id, Pedido novo) throws SQLException {
+        String sql = "UPDATE Pedido SET Id = ?, Data = ?, Cliente = ?, Valor = ?"
+                + "WHERE Id = ? ";
+        PreparedStatement stat = connection.prepareStatement(sql);
+
+        try {
+            setPedido(novo, stat);
+            stat.setInt(5, id);
             stat.executeUpdate();
         } catch (SQLException ex) {
             throw new SQLException(ex);

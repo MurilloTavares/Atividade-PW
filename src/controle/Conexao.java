@@ -33,6 +33,17 @@ public class Conexao {
             System.out.println("Erro na Conexao.");
         }
     }
+    
+    public Conexao(String url, String user, String pass) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection(url, user, pass);
+
+            factory = RowSetProvider.newFactory();
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("Erro na Conexao.");
+        }
+    }
 
     public int executaUpdate(String sql) throws SQLException {
         try {

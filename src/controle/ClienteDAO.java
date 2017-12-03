@@ -10,8 +10,18 @@ import modelo.Cliente;
 
 public class ClienteDAO implements InterfaceDAO<Cliente> {
 
-    Conexao conexao = new Conexao();
-    Connection connection = conexao.getConn();
+    Conexao conexao;
+    Connection connection;
+    
+    public ClienteDAO(){
+        conexao = new Conexao();
+        connection = conexao.getConn();
+    }
+    
+    public ClienteDAO(String url, String user, String pass){
+        conexao = new Conexao(url, user, pass);
+        connection = conexao.getConn();
+    }
 
     private PreparedStatement setCliente(Cliente c, PreparedStatement stat) throws SQLException {
         try {
@@ -51,6 +61,22 @@ public class ClienteDAO implements InterfaceDAO<Cliente> {
         try {
             setCliente(novo, stat);
             stat.setInt(6, c.getId());
+            stat.executeUpdate();
+        } catch (SQLException ex) {
+            throw new SQLException(ex);
+        } finally {
+            stat.close();
+        }
+    }
+    
+    public void alterar(int id, Cliente novo) throws SQLException {
+        String sql = "UPDATE Cliente SET Id = ?, Nome = ?, Documento = ?, Saldo = ?, Ativo = ? "
+                + "WHERE Id = ? ";
+        PreparedStatement stat = connection.prepareStatement(sql);
+
+        try {
+            setCliente(novo, stat);
+            stat.setInt(6, id);
             stat.executeUpdate();
         } catch (SQLException ex) {
             throw new SQLException(ex);

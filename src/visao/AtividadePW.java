@@ -11,7 +11,7 @@ public class AtividadePW {
 
     public static void main(String[] args) {
         
-//        ClienteDAO cDao = new ClienteDAO();
+//        ClienteDAO cDao = new ClienteDAO("jdbc:postgresql://localhost:5432/atividadepw","postgres","1234");
 //        
 //        Cliente c1 = new Cliente(1,"JOAO","111",500,true);
 //        Cliente c2 = new Cliente(2,"MARIA","222",500,true);
@@ -19,8 +19,8 @@ public class AtividadePW {
 //        
 //        try{
 //            cDao.incluir(c1);
-//            cDao.incluir(c2);
-//            cDao.incluir(c3);
+//            cDao.incluir(c1);
+//            cDao.incluir(c1);
 //            cDao.listar();            
 //        }catch(SQLException ex){
 //            System.out.println("Erro");
@@ -32,14 +32,12 @@ public class AtividadePW {
 //        
 //        Pedido p1 = new Pedido(1,new Date(2017-1900,10,2), 1, 50);
 //        Pedido p2 = new Pedido(2,new Date(2017-1900,01,23), 2, 80);
-//        Pedido p3 = new Pedido(3,new Date(2017-1900,8,12), 2, 80);
-//        Pedido p4 = new Pedido(4,new Date(2017-1900,6,28), 3, 40);
+//        Pedido p3 = new Pedido(3,new Date(2017-1900,8,12), 3, 80);
 //        
 //        try{
 //            pDao.incluir(p1);
 //            pDao.incluir(p2);
 //            pDao.incluir(p3);
-//            pDao.incluir(p4);
 //            pDao.listar();
 //        }catch(SQLException ex){
 //            System.out.println("Erro");
