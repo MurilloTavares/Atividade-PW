@@ -1,11 +1,18 @@
 package visao;
 
 import controle.ClienteDAO;
+import controle.Conexao;
 import controle.PedidoDAO;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.FilteredRowSet;
+import javax.sql.rowset.JdbcRowSet;
 import modelo.Cliente;
 import modelo.Pedido;
+import modelo.SaldoFilter;
 
 public class AtividadePW {
 
@@ -23,11 +30,11 @@ public class AtividadePW {
 //            cDao.incluir(c1);
 //            cDao.listar();            
 //        }catch(SQLException ex){
-//            System.out.println("Erro");
+//            System.out.println("Erro Cliente DAO");
 //        }
-
+//
 //        System.out.println("");
-       
+//       
 //        PedidoDAO pDao = new PedidoDAO();
 //        
 //        Pedido p1 = new Pedido(1,new Date(2017-1900,10,2), 1, 50);
@@ -40,18 +47,30 @@ public class AtividadePW {
 //            pDao.incluir(p3);
 //            pDao.listar();
 //        }catch(SQLException ex){
-//            System.out.println("Erro");
+//            System.out.println("Erro Pedido DAO");
 //        }
 
+        Conexao con = new Conexao();
+        
+        String sql = "SELECT * FROM CLIENTE";
+        
+        try {
+            SaldoFilter filtro = new SaldoFilter(400,600);
+            FilteredRowSet rs = con.execFilteredRowSet(sql, filtro);
+            while(rs.next()){
+                int id = rs.getInt("Id");
+                String nome = rs.getString("Nome");
+                String documento = rs.getString("Documento");
+                float saldo = rs.getFloat("Saldo");
+                boolean ativo = rs.getBoolean("Ativo");
 
-//        ClienteDAO cDao = new ClienteDAO();
-//        
-//        try{
-//            cDao.deletar(3);
-//            cDao.listar();            
-//        }catch(SQLException ex){
-//            System.out.println("Erro");
-//        }
+                System.out.println("ID: " + id + ", NOME: " + nome + ", DOCUMENTO: "
+                        + documento + ", SALDO: " + saldo + ", ATIVO: " + ativo);                
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro JDBCROWSET");
+        }
+
         
     }
     

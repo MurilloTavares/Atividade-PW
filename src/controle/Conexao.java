@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.sql.RowSet;
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.FilteredRowSet;
 import javax.sql.rowset.JdbcRowSet;
+import javax.sql.rowset.Predicate;
 import javax.sql.rowset.RowSetFactory;
 import javax.sql.rowset.RowSetProvider;
 
@@ -70,7 +72,7 @@ public class Conexao {
         }
     }
 
-    public void executaRowSet(RowSet rs, String sql) throws SQLException {
+    public void execRowSet(RowSet rs, String sql) throws SQLException {
         try {
             rs.setUrl(url);
             rs.setUsername(user);
@@ -83,27 +85,40 @@ public class Conexao {
         }
     }
 
-    public void jdbcRowSet(String sql) throws SQLException {
-        JdbcRowSet jrs;
+    public JdbcRowSet execJdbcRowSet(String sql) throws SQLException {
+        JdbcRowSet jrs = null;
         try {
             jrs = factory.createJdbcRowSet();
-            executaRowSet(jrs, sql);
+            execRowSet(jrs, sql);
         } catch (SQLException ex) {
             throw new SQLException(ex);
         }
+        return jrs;
     }
 
-    public void cachedRowSet(String sql) throws SQLException {
-        CachedRowSet crs;
+    public CachedRowSet execCachedRowSet(String sql) throws SQLException {
+        CachedRowSet crs = null;
         try {
             crs = factory.createCachedRowSet();
-            executaRowSet(crs, sql);
+            execRowSet(crs, sql);
         } catch (SQLException ex) {
             throw new SQLException(ex);
         }
+        return crs;
     }
     
-    
+    public FilteredRowSet execFilteredRowSet(String sql, Predicate p) throws SQLException{
+        FilteredRowSet frs = null;
+        try{
+            frs = factory.createFilteredRowSet();
+            execRowSet(frs, sql);
+            frs.beforeFirst();
+            frs.setFilter(p);
+        } catch (SQLException ex) {
+            throw new SQLException(ex);
+        }
+        return frs;
+    }
 
     public Connection getConn() {
         return conn;
