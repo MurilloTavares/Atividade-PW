@@ -5,10 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.RowSet;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.FilteredRowSet;
 import javax.sql.rowset.JdbcRowSet;
+import javax.sql.rowset.JoinRowSet;
 import javax.sql.rowset.Predicate;
 import javax.sql.rowset.RowSetFactory;
 import javax.sql.rowset.RowSetProvider;
@@ -85,7 +88,7 @@ public class Conexao {
         }
     }
 
-    public JdbcRowSet execJdbcRowSet(String sql) throws SQLException {
+    public RowSet execJdbcRowSet(String sql) throws SQLException {
         JdbcRowSet jrs = null;
         try {
             jrs = factory.createJdbcRowSet();
@@ -96,7 +99,7 @@ public class Conexao {
         return jrs;
     }
 
-    public CachedRowSet execCachedRowSet(String sql) throws SQLException {
+    public RowSet execCachedRowSet(String sql) throws SQLException {
         CachedRowSet crs = null;
         try {
             crs = factory.createCachedRowSet();
@@ -107,7 +110,7 @@ public class Conexao {
         return crs;
     }
     
-    public FilteredRowSet execFilteredRowSet(String sql, Predicate p) throws SQLException{
+    public RowSet execFilteredRowSet(String sql, Predicate p) throws SQLException{
         FilteredRowSet frs = null;
         try{
             frs = factory.createFilteredRowSet();
@@ -118,6 +121,18 @@ public class Conexao {
             throw new SQLException(ex);
         }
         return frs;
+    }
+    
+    public RowSet execJoinRowSet(RowSet rs1, RowSet rs2, String column) throws SQLException{
+        JoinRowSet jrs = null;
+        try {
+            jrs = factory.createJoinRowSet();
+            jrs.addRowSet(rs1, column);
+            jrs.addRowSet(rs2, column);
+        } catch (SQLException ex) {
+            throw new SQLException(ex);
+        }
+        return jrs;
     }
 
     public Connection getConn() {
